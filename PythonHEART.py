@@ -9,7 +9,7 @@ CANVAS_CENTER_Y = CANVAS_HEIGHT / 2
 IMAGE_ENLARGE = 11  
 # HEART_COLOR = "#ff0000"  
 
-HEART_COLOR = random.choice(seq=["#ffffff", "#00ff00", "#0000ff", "#ff0000"])
+# HEART_COLOR = random.choice(seq=["#ffffff", "#00ff00", "#0000ff", "#ff0000"])
 # ("#ffffff", "#00ff00", "#0000ff", "#ff0000")
 
 def heart_function(t, shrink_ratio: float = IMAGE_ENLARGE):
@@ -49,7 +49,17 @@ def curve(p):
   
     return 2 * (2 * sin(4 * p)) / (2 * pi)
 
+mau_choices = ["#ffffff", "#00ff00", "#0000ff", "#ff0000", "#00FFFF", "#888888", "#66FFFF", "#FFFF00", "#33FFCC", "#CC0000"]
+
 class Heart:
+
+    # def __init__(self):
+    #     self.HEART_COLOR = random.choice(mau_choices)
+    
+    def thay_doi_mau_lien_tuc(self, canvas, delay_ms=1000):
+        self.HEART_COLOR = random.choice(mau_choices)
+        canvas.config(bg=self.HEART_COLOR)
+        canvas.after(delay_ms, self.thay_doi_mau_lien_tuc, canvas, delay_ms)
   
 
     def __init__(self, generate_frame=20):
@@ -60,6 +70,8 @@ class Heart:
         self.build(2000)
 
         self.random_halo = 1000
+
+        self.HEART_COLOR = random.choice(mau_choices)
 
         self.generate_frame = generate_frame
         for frame in range(generate_frame):
@@ -138,7 +150,7 @@ class Heart:
 
     def render(self, render_canvas, render_frame):
         for x, y, size in self.all_points[render_frame % self.generate_frame]:
-            render_canvas.create_rectangle(x, y, x + size, y + size, width=0, fill=HEART_COLOR)
+            render_canvas.create_rectangle(x, y, x + size, y + size, width=0, fill=self.HEART_COLOR)
 
 
 def draw(main: Tk, render_canvas: Canvas, render_heart: Heart, render_frame=0):
@@ -153,6 +165,12 @@ if __name__ == '__main__':
     canvas.pack()
     heart = Heart()  
     draw(root, canvas, heart)  
+    canvas = Canvas(root, width=0, height=0)
+    canvas.pack()
+
+    # heart = Heart()
+    canvas.config(bg=heart.HEART_COLOR)
+    heart.thay_doi_mau_lien_tuc(canvas)
     root.mainloop()
 
 
